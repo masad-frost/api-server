@@ -14,7 +14,7 @@
         "test:eslint": "eslint \"**/*.js\"",
         "test:eslint:fix": "npm run test:eslint -- --fix",
         "test:mocha": "mocha tests/suite",
-        "test:mocha:with-server": "node tests/run.js",
+        "test:mocha:with-server": ". ./tests/run.sh",
         "dev": "LOCAL=true node index.js",
         "prod": "node --expose-gc --max-old-space-size=2048 index.js"
     },
