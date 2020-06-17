@@ -11,17 +11,22 @@ echo "Server errors redirected to: $error"
 echo "Waiting for server to start"
 
 # trap exit and make sure we kill the server
-cleanup() { kill -9 $server_pid; }
+cleanup() {
+    if ps -p $server_pid > /dev/null
+    then
+        kill -9 $server_pid;
+    fi
+}
 trap 'cleanup' INT TERM EXIT
 
 # wait for "Listening on http://0.0.0.0:5050"
 until grep -q -i 'Listening on http://0.0.0.0:5050' $output
 do
-    if ! ps $server_pid > /dev/null
+    if ! ps -p $server_pid > /dev/null
     then
-        # exit with 1 if the server doesn't startup
-        echo "$(<$error)"
+        cat $error
         echo "The server died" >&2
+        # exit with 1 if the server doesn't startup
         return 1
     fi
     echo -n "."
